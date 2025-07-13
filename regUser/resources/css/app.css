@@ -1,0 +1,23 @@
+
+@import url('https://fonts.bunny.net/css?family=Gantari:400,600,700');
+@import "tailwindcss";
+@source "../views";
+ 
+
+body {
+    font-family: 'Gantari', sans-serif;
+}
+
+.custom-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
