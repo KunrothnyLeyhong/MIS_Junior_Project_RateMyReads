@@ -40,6 +40,7 @@
                     <th class="py-2 px-4 text-center">Last Name</th>
                     <th class="py-2 px-4 text-center">Email</th>
                     <th class="py-2 px-4 text-center">Reason Report</th>
+                    <th class="py-2 px-4 text-center">Status</th>
                     <th class="py-2 px-4 text-center">Action</th>
                 </tr>
             </thead>
@@ -51,13 +52,30 @@
                         <td class="py-3 px-6 text-center">{{ $report->user->last_name ?? '-' }}</td>
                         <td class="py-3 px-6 text-center">{{ $report->user->email ?? '-' }}</td>
                         <td class="py-3 px-6">{{ \Illuminate\Support\Str::words($report->reason, 10, '...') }}</td>
-                        <td class="py-3 px-6 text-center space-x-1">
+                        <td class="py-3 px-6">
+                            <!-- Display current status with simple styling -->
+                            <span class="px-2 py-1 rounded text-xs uppercase font-semibold
+                                @if($report->status === 'approved') bg-green-200 text-green-800
+                                @elseif($report->status === 'rejected') bg-red-200 text-red-800
+                                @else bg-yellow-200 text-yellow-800 @endif">
+                                {{ $report->status }}
+                            </span>
+                        </td>
+                        <td class="py-3 px-6 text-center">
                             <a href="{{ route('report.reportcommentdetail', $report->id) }}"
-                               class="bg-green-500 text-white rounded px-4 py-2 inline-block">Detail</a>
-                            <button onclick="openModal('approve', {{ $report->id }})"
-                               class="bg-blue-500 text-white rounded px-4 py-2">Approve</button>
-                            <button onclick="openModal('reject', {{ $report->id }})"
-                               class="bg-red-500 text-white rounded px-4 py-2">Reject</button>
+                                class="bg-green-500 text-white rounded px-4 py-2 inline-block mb-1">Detail</a>
+
+                            @if($report->status === 'pending')
+                                <button type="button"
+                                    onclick="openModal('approve', {{ $report->id }})"
+                                    class="bg-blue-500 text-white rounded px-4 py-2 mb-1">Approve</button>
+
+                                <button type="button"
+                                    onclick="openModal('reject', {{ $report->id }})"
+                                    class="bg-red-500 text-white rounded px-4 py-2">Reject</button>
+                            @else
+                                
+                            @endif
                         </td>
                     </tr>
                 @empty

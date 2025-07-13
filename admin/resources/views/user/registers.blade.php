@@ -38,7 +38,7 @@
                             <input type="checkbox"
                                 class="status-toggle"
                                 data-id="{{ $user->id }}"
-                                {{ $user->status ? 'checked' : '' }}>
+                                {{ $user->status == 1? 'checked' : '' }}>
                             <span class="slider round"></span>
                         </label>
                     </td>

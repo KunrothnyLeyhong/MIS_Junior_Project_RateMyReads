@@ -1,33 +1,26 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Report extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'reportable_id',
-        'reportable_type',
-        'reason',
-        'status',
-    ];
+protected $fillable = [
+    'user_id',
+    'reason',
+    'status',
+    'reportable_id',
+    'reportable_type',
+];
 
-    /**
-     * Get the owning reportable model (comment or review).
-     */
     public function reportable()
     {
-        return $this->morphTo();
+        return $this->morphTo(); // Automatically loads Review, or other types later
     }
 
-    /**
-     * Get the user who made the report.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);

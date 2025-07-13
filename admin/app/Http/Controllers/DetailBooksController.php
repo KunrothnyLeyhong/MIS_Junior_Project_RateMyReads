@@ -10,13 +10,21 @@ class DetailBooksController extends Controller
 {
     // Show book details
     public function detailbook($id)
-    {
-        $book = ListBooks::findOrFail($id);
-        $avgRating = $book->reviews()->avg('rating') ?? 0;
-        $book->rating = $avgRating;
-        $reviewsAndRatingsCount = $book->reviews()->count();
-        return view('book.detailbooks', compact('book', 'avgRating', 'reviewsAndRatingsCount'));
-    }
+{
+    $book = ListBooks::findOrFail($id);
+
+    // Only count & average reviews that are visible (hidden = 0)
+    $visibleReviewsQuery = $book->reviews()->where('hidden', 0);
+
+    $avgRating = $visibleReviewsQuery->avg('rating') ?? 0;
+    $reviewsAndRatingsCount = $visibleReviewsQuery->count();
+
+    // Optional: attach rating to book if you need
+    $book->rating = $avgRating;
+
+    return view('book.detailbooks', compact('book', 'avgRating', 'reviewsAndRatingsCount'));
+}
+
 
     // Handle cover image upload
    public function uploadCover(Request $request, $id)

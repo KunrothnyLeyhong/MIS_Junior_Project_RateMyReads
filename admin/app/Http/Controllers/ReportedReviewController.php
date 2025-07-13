@@ -17,21 +17,37 @@ class ReportedReviewController extends Controller
         return view('report.reportreview', compact('reports'));
     }
 
-    public function approve($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->status = 'approved';
-        $report->save();
+     public function approve($id)
+{
+    $report = Report::findOrFail($id);
+    $report->status = 'approved';
+    $report->save();
 
-        return redirect()->route('report.reportreview')->with('success', 'Review approved successfully.');
+    $review = $report->reportable;
+
+    if ($review instanceof \App\Models\Review) {
+        $review->hidden = 1;
+        $review->save();
     }
+
+    return redirect()->route('report.reportreview')->with('success', 'Report approved and review hidden.');
+}
+
+
 
     public function reject($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->status = 'rejected';
-        $report->save();
+{
+    $report = Report::findOrFail($id);
+    $report->status = 'rejected';
+    $report->save();
 
-        return redirect()->route('report.reportreview')->with('info', 'Review rejected successfully.');
+    $review = $report->reportable;
+
+    if ($review instanceof \App\Models\Review) {
+        $review->hidden = 0;
+        $review->save();
     }
+
+    return redirect()->route('report.reportreview')->with('success', 'Report rejected.');
+}
 }

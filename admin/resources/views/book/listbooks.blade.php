@@ -57,6 +57,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $books->appends(request()->query())->links() }}
+        </div>
     </div>
 </main>
 

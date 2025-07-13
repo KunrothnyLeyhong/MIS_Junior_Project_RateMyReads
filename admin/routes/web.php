@@ -79,13 +79,15 @@ Route::middleware(['auth:admin','verified'])->group(function () {
     //reportcomment detail
     Route::get('/report/reportcommentdetail/{id}', [ReportedCmtDetailController::class, 'show'])->name('report.reportcommentdetail');
     Route::post('/report/reportcommentdetail/{id}/approve', [ReportedCmtDetailController::class, 'approve'])->name('report.reportcommentdetail.approve');
-    Route::get('/report/reportcommentdetail/{id}/reject', [ReportedCmtDetailController::class, 'reject'])->name('report.reportcomment.reject');
+    Route::post('/report/reportcommentdetail/{id}/reject', [ReportedCmtDetailController::class, 'reject'])->name('report.reportcommentdetail.reject');
     //reportreview detail
     Route::get('/report/reportreviewdetail/{id}', [ReportedReviewDetailController::class, 'show'])->name('report.reportreviewdetail');
     Route::post('/report/reportreviewdetail/{id}/approve', [ReportedReviewDetailController::class, 'approve'])->name('report.reportreviewdetail.approve');
-    Route::get('/report/reportreviewdetail/{id}/reject', [ReportedReviewDetailController::class, 'reject'])->name('report.reportreview.reject');
+    Route::post('/report/reportreviewdetail/{id}/reject', [ReportedReviewDetailController::class, 'reject'])->name('report.reportreviewdetail.reject');
     //contact us
     Route::get('/contact/contact_us', [ContactController::class, 'index'])->name('contact.messages');
     Route::get('/contact/reply/{id}', [ContactController::class, 'reply'])->name('contact.reply');
     Route::post('/contact/reply/{id}', [ContactController::class, 'sendReply'])->name('contact.sendReply'); 
+    Route::post('/report/{id}/status', [ReportedReviewController::class, 'updateStatus'])->name('report.updateStatus');
+
 });

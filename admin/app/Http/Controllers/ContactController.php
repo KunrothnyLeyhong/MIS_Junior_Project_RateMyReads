@@ -10,7 +10,7 @@ class ContactController extends Controller
     public function index()
     {
         // Fetch all messages ordered by latest
-        $contacts_us = ContactUs::latest()->get();
+        $contacts_us = ContactUs::latest()->paginate(9);
 
         return view('contact.contact_us', compact('contacts_us'));
     }

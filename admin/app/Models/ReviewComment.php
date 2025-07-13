@@ -12,8 +12,9 @@ class ReviewComment extends Model
     protected $fillable = [
         'user_id',
         'review_id',
-        'reason', 
-        'comment'// <-- Change this to the actual column in your DB
+        'message', 
+        // 'comment',// <-- Change this to the actual column in your DB
+        'hidden' // Assuming you want to add hidden status to comments as well
     ];
 
     public function user()

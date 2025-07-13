@@ -19,20 +19,36 @@ class ReportedCmtDetailController extends Controller
     }
 
     public function approve($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->status = 'approved';
-        $report->save();
+{
+    $report = Report::findOrFail($id);
+    $report->status = 'approved';
+    $report->save();
 
-        return redirect()->route('report.reportcomment')->with('success', 'Comment approved successfully.');
+    $comment = $report->reportable;
+
+    if ($comment instanceof \App\Models\ReviewComment) {
+        $comment->hidden = 1;
+        $comment->save();
     }
+
+    return redirect()->route('report.reportcomment')->with('success', 'Comment approved and review hidden.');
+}
+
+
 
     public function reject($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->status = 'rejected';
-        $report->save();
+{
+    $report = Report::findOrFail($id);
+    $report->status = 'rejected';
+    $report->save();
 
-        return redirect()->route('report.reportcomment')->with('success', 'Comment rejected successfully.');
+    $comment = $report->reportable;
+
+    if ($comment instanceof \App\Models\ReviewComment) {
+        $comment->hidden = 0;
+        $comment->save();
     }
+
+    return redirect()->route('report.reportcomment')->with('success', 'Comment rejected.');
+}
 }

@@ -64,6 +64,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $contacts_us->links() }}
+        </div>
     </div>
 </main>
 

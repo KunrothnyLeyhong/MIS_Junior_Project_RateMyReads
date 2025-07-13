@@ -20,13 +20,13 @@
         <div class="md:flex md:space-x-6">
             <!-- Book Cover -->
             <div class="flex justify-center md:block mb-4 md:mb-0">
-                @if ($book && $book->cover_image)
-                    <img src="{{ $book->cover_image }}" alt="Book Cover" class="rounded shadow max-h-72">
-                @else
-                    <div class="w-48 h-72 bg-gray-200 flex items-center justify-center rounded shadow">
-                        <span class="text-gray-500 text-sm">No Cover</span>
-                    </div>
-                @endif
+                @if ($book && $book->image)
+                        <img src="{{ $book->image }}" alt="Book Cover" class="rounded shadow max-h-72">
+                    @else
+                        <div class="w-48 h-72 bg-gray-200 flex items-center justify-center rounded shadow">
+                            <span class="text-gray-500 text-sm">No Cover</span>
+                        </div>
+                    @endif
             </div>
 
             <!-- Book Info -->
@@ -42,8 +42,8 @@
 
         <!-- Comment Section -->
         <div class="flex items-center mb-4">
-            <img src="https://via.placeholder.com/40" class="rounded-full w-10 h-10 mr-3" alt="User">
-            <div>
+<img src="{{ $user->profile_picture ?? asset('img/default_picture.avif') }}" alt="User Photo"
+                    class="w-10 h-10 rounded-full mr-2" />            <div>
                 <p class="font-semibold">{{ $user->first_name ?? 'Anonymous' }} {{ $user->last_name ?? '' }}</p>
                 <p class="text-sm text-gray-500">
                     {{ \Carbon\Carbon::parse($comment->created_at ?? now())->format('jS F Y') }}
@@ -54,11 +54,16 @@
         <p class="text-gray-700 mb-6">{{ $comment->message ?? 'No comment found.' }}</p>
 
         <!-- Action Buttons -->
-        <form method="POST" action="{{ route('report.reportcommentdetail.approve', $report->id) }}" class="flex space-x-3">
+        <form method="POST" action="{{ route('report.reportcommentdetail.approve', $report->id) }}" class="inline-block">
             @csrf
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Approve</button>
-            <a href="{{ route('report.reportcomment.reject', $report->id) }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Reject</a>
         </form>
+        <form method="POST" action="{{ route('report.reportcommentdetail.reject', $report->id) }}" class="inline-block ml-3">
+    @csrf
+    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+        Reject
+    </button>
+</form>
     </div>
 </div>
 @endsection

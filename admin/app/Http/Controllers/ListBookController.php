@@ -16,7 +16,7 @@ class ListBookController extends Controller
             return $query->where('title', 'like', "%{$search}%")
                          ->orWhere('genre', 'like', "%{$search}%")
                          ->orWhere('author', 'like', "%{$search}%");
-        })->get();
+        })->paginate(10);
 
         return view('book.listbooks', compact('books'));
     }

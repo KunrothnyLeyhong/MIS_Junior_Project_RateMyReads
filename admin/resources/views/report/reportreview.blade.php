@@ -42,6 +42,7 @@
                     <th class="py-2 px-4">Last Name</th>
                     <th class="py-2 px-4">Email</th>
                     <th class="py-2 px-4">Reason Report</th>
+                    <th class="py-2 px-4">Status</th>
                     <th class="py-2 px-4 text-center">Action</th>
                 </tr>
             </thead>
@@ -55,22 +56,35 @@
                         <td class="py-3 px-6">
                             <p class="text-gray-600">{{ \Illuminate\Support\Str::words($report->reason, 10, '...') }}</p>
                         </td>
+                        <td class="py-3 px-6">
+                            <!-- Display current status with simple styling -->
+                            <span class="px-2 py-1 rounded text-xs uppercase font-semibold
+                                @if($report->status === 'approved') bg-green-200 text-green-800
+                                @elseif($report->status === 'rejected') bg-red-200 text-red-800
+                                @else bg-yellow-200 text-yellow-800 @endif">
+                                {{ $report->status }}
+                            </span>
+                        </td>
                         <td class="py-3 px-6 text-center">
                             <a href="{{ route('report.reportreviewdetail', $report->id) }}"
                                 class="bg-green-500 text-white rounded px-4 py-2 inline-block mb-1">Detail</a>
 
-                            <button type="button"
-                                onclick="openModal('approve', {{ $report->id }})"
-                                class="bg-blue-500 text-white rounded px-4 py-2 mb-1">Approve</button>
+                            @if($report->status === 'pending')
+                                <button type="button"
+                                    onclick="openModal('approve', {{ $report->id }})"
+                                    class="bg-blue-500 text-white rounded px-4 py-2 mb-1">Approve</button>
 
-                            <button type="button"
-                                onclick="openModal('reject', {{ $report->id }})"
-                                class="bg-red-500 text-white rounded px-4 py-2">Reject</button>
+                                <button type="button"
+                                    onclick="openModal('reject', {{ $report->id }})"
+                                    class="bg-red-500 text-white rounded px-4 py-2">Reject</button>
+                            @else
+                                
+                            @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center text-gray-500 py-4">No reported reviews found.</td>
+                        <td colspan="7" class="text-center text-gray-500 py-4">No reported reviews found.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -98,6 +112,9 @@
 
 <!-- Modal Script -->
 <script>
+    const approveUrl = @json(route('report.reportreview.approve', ['id' => '__id__']));
+    const rejectUrl = @json(route('report.reportreview.reject', ['id' => '__id__']));
+
     function openModal(action, id) {
         const modal = document.getElementById('actionModal');
         const form = document.getElementById('modalForm');
@@ -105,11 +122,11 @@
         const message = document.getElementById('modalMessage');
 
         if (action === 'approve') {
-            form.action = `/report/reportreview/${id}/approve`;
+            form.action = approveUrl.replace('__id__', id);
             title.textContent = 'Approve Review';
             message.textContent = 'Are you sure you want to approve this review?';
         } else if (action === 'reject') {
-            form.action = `/report/reportreview/${id}/reject`;
+            form.action = rejectUrl.replace('__id__', id);
             title.textContent = 'Reject Review';
             message.textContent = 'Are you sure you want to reject this review?';
         }
@@ -117,11 +134,6 @@
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }
-
-    function closeModal() {
-        const modal = document.getElementById('actionModal');
-        modal.classList.remove('flex');
-        modal.classList.add('hidden');
-    }
 </script>
+
 @endsection

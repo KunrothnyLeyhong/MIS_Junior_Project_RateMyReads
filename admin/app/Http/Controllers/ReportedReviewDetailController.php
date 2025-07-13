@@ -18,20 +18,36 @@ class ReportedReviewDetailController extends Controller
     }
 
     public function approve($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->status = 'approved';  // or 1 if using integers
-        $report->save();
+{
+    $report = Report::findOrFail($id);
+    $report->status = 'approved';
+    $report->save();
 
-        return redirect()->route('report.reportreview')->with('success', 'Reported review approved successfully.');
+    $review = $report->reportable;
+
+    if ($review instanceof \App\Models\Review) {
+        $review->hidden = 1;
+        $review->save();
     }
+
+    return redirect()->route('report.reportreview')->with('success', 'Report approved and review hidden.');
+}
+
+
 
     public function reject($id)
-    {
-        $report = Report::findOrFail($id);
-        $report->status = 'rejected';  // or 2 if using integers
-        $report->save();
+{
+    $report = Report::findOrFail($id);
+    $report->status = 'rejected';
+    $report->save();
 
-        return redirect()->route('report.reportreview')->with('success', 'Reported review rejected.');
+    $review = $report->reportable;
+
+    if ($review instanceof \App\Models\Review) {
+        $review->hidden = 0;
+        $review->save();
     }
+
+    return redirect()->route('report.reportreview')->with('success', 'Report rejected.');
+}
 }
