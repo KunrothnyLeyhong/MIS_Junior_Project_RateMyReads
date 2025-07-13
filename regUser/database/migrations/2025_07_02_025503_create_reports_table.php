@@ -16,6 +16,7 @@ return new class extends Migration
     $table->morphs('reportable'); // creates reportable_id and reportable_type
     $table->foreignId('user_id')->constrained()->onDelete('cascade'); // who reported
     $table->string('reason'); // inappropriate, spam, etc.
+    $table->tinyInteger('status')->default('pending'); // status of the report, e.g., pending, resolved
     $table->timestamps();
             
     $table->unique(['user_id', 'reportable_id', 'reportable_type'], 'unique_report');

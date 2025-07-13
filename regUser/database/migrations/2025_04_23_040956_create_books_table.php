@@ -15,10 +15,11 @@ class CreateBooksTable extends Migration
             $table->string('genre');
             $table->integer('pages');
             $table->unsignedBigInteger('publisher_id'); // Add publisher_id column
-        $table->foreign('publisher_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key constraint
+            $table->foreign('publisher_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key constraint
             $table->date('published_date');
             $table->text('description');
             $table->string('image')->nullable(); // Store image path
+            $table->tinyInteger('status')->default('pending'); // Add rating column
             $table->timestamps();
         });
     }
